@@ -1,15 +1,21 @@
+import { useEffect } from "react";
 import AddTodo from "../components/AddTodo";
-import Todos from "../components/Todos";
+import TodoCard from "../components/TodoCard";
+
 import { useTodo } from "../hooks/useTodo";
 
 export default function Home() {
-  const { todos } = useTodo();
+  const { todos, getTodos } = useTodo();
+
+  useEffect(() => {
+    getTodos();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div>
       <div className="container p-10">
         <div className="mb-10 flex justify-center items-center">
-          {/* You can open the modal using document.getElementById('ID').showModal() method */}
           <button
             className="btn"
             onClick={() => document?.getElementById("my_modal")?.showModal()}
@@ -37,7 +43,7 @@ export default function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  place-items-center gap-10">
           {todos.map((todo) => (
-            <Todos key={todo._id} todo={todo} />
+            <TodoCard key={todo._id} todo={todo} />
           ))}
         </div>
       </div>

@@ -7,28 +7,27 @@ import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Navbar from "./components/Navbar";
 
+import { useAuth } from "./hooks/useAuth";
+
 export default function App() {
-  const authenticated = localStorage.getItem("auth");
+  const { auth } = useAuth();
 
   return (
     <Routes>
-      <Route
-        path="/"
-        element={!authenticated ? <Landing /> : <Navigate to="/home" />}
-      />
+      <Route path="/" element={!auth ? <Landing /> : <Navigate to="/home" />} />
       <Route
         path="/signup"
-        element={!authenticated ? <Signup /> : <Navigate to="/home" />}
+        element={!auth ? <Signup /> : <Navigate to="/home" />}
       />
       <Route
         path="/login"
-        element={!authenticated ? <Login /> : <Navigate to="/home" />}
+        element={!auth ? <Login /> : <Navigate to="/home" />}
       />
 
       <Route
         path="/home"
         element={
-          authenticated ? (
+          auth ? (
             <>
               <Navbar />
               <Home />
@@ -41,7 +40,7 @@ export default function App() {
       <Route
         path="/profile"
         element={
-          authenticated ? (
+          auth ? (
             <>
               <Navbar />
               <Profile />

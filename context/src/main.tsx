@@ -6,11 +6,21 @@ import { Toaster } from "sonner";
 import "./index.css";
 import App from "./App.tsx";
 
+import { AuthProvider } from "./context/auth";
+import { UserProvider } from "./context/user.tsx";
+import { TodoProvider } from "./context/todos.tsx";
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
-      <Toaster position="top-right" />
-      <App />
+      <AuthProvider>
+        <UserProvider>
+          <TodoProvider>
+            <Toaster position="top-right" />
+            <App />
+          </TodoProvider>
+        </UserProvider>
+      </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

@@ -43,7 +43,7 @@ export async function createTodo(req: Request, res: Response) {
       return res.status(400).json({ message: "All fields are required!" });
     }
 
-    const todoExists = await todoModel.findOne({ title });
+    const todoExists = await todoModel.findOne({ user: user._id, title });
 
     if (todoExists) {
       return res

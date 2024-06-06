@@ -1,8 +1,20 @@
+import { useState, FormEvent } from "react";
 import { Link } from "react-router-dom";
+import { LoginData } from "../context/auth";
 import { useAuth } from "../hooks/useAuth";
 
 export default function Login() {
-  const { loginData, setLoginData, handleLogin } = useAuth();
+  const [loginData, setLoginData] = useState<LoginData>({
+    username: "",
+    password: "",
+  });
+
+  const { login } = useAuth();
+
+  function handleLogin(e: FormEvent) {
+    e.preventDefault();
+    login(loginData);
+  }
 
   return (
     <div className="hero min-h-screen bg-base-200">

@@ -1,8 +1,22 @@
+import { useState, FormEvent } from "react";
 import { Link } from "react-router-dom";
+import { SignupData } from "../context/auth";
 import { useAuth } from "../hooks/useAuth";
 
 export default function Signup() {
-  const { signupData, setSignupData, handleSignup } = useAuth();
+  const [signupData, setSignupData] = useState<SignupData>({
+    username: "",
+    email: "",
+    password: "",
+  });
+
+  const { signup } = useAuth();
+
+  function handleSignup(e: FormEvent) {
+    e.preventDefault();
+
+    signup(signupData);
+  }
 
   return (
     <div className="hero min-h-screen bg-base-200">

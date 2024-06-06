@@ -1,7 +1,24 @@
+import { FormEvent, useEffect } from "react";
+import { UpdateUserInfo } from "../context/user";
 import { useUser } from "../hooks/useUser";
 
-export default function UpdateUser() {
-  const { user, handleUpdateUser } = useUser();
+export default function UpdateUser({
+  updatedInfo,
+}: {
+  updatedInfo: UpdateUserInfo;
+}) {
+  const { user, getUser, updateUser } = useUser();
+
+  useEffect(() => {
+    getUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function handleUpdateUser(e: FormEvent) {
+    e.preventDefault();
+    updateUser(updatedInfo);
+    document.getElementById(`update_modal_${user?._id}`)?.close();
+  }
 
   return (
     <div>
@@ -26,10 +43,7 @@ export default function UpdateUser() {
               Are you sure you want to update your profile?
             </h3>
             <div className="space-x-5 mt-5">
-              <button
-                onClick={() => handleUpdateUser}
-                className="btn btn-ghost"
-              >
+              <button onClick={handleUpdateUser} className="btn btn-ghost">
                 Sure
               </button>
 

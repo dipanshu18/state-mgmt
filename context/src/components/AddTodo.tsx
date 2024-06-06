@@ -1,7 +1,23 @@
+import { FormEvent, useState } from "react";
 import { useTodo } from "../hooks/useTodo";
+import { CreateTodo } from "../context/todos";
 
 export default function AddTodo() {
-  const { handleCreateTodo, createTodoInfo, setCreateTodoInfo } = useTodo();
+  const [createTodoInfo, setCreateTodoInfo] = useState<CreateTodo>({
+    title: "",
+    body: "",
+  });
+  const { createTodo } = useTodo();
+
+  function handleCreateTodo(e: FormEvent) {
+    e.preventDefault();
+
+    createTodo(createTodoInfo);
+
+    setCreateTodoInfo({ title: "", body: "" });
+
+    document?.getElementById("my_modal")?.close();
+  }
 
   return (
     <form onSubmit={handleCreateTodo}>

@@ -1,11 +1,34 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../hooks/useUser";
-import DeleteUser from "../components/DeleteUser";
+
+import { UpdateUserInfo } from "../context/user";
+
 import UpdateUser from "../components/UpdateUser";
+import DeleteUser from "../components/DeleteUser";
+import { useUser } from "../hooks/useUser";
 
 export default function Profile() {
   const navigate = useNavigate();
-  const { updateUserInfo, setUpdateUserInfo } = useUser();
+
+  const [updateUserInfo, setUpdateUserInfo] = useState<
+    UpdateUserInfo | undefined
+  >({
+    username: "",
+    email: "",
+    password: "",
+  });
+
+  const { user, getUser } = useUser();
+
+  useEffect(() => {
+    getUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    setUpdateUserInfo(user);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="container p-5 flex flex-col justify-center items-center">
@@ -25,7 +48,7 @@ export default function Profile() {
                   username: e.target.value,
                 });
               }}
-              value={updateUserInfo.username}
+              value={updateUserInfo?.username}
               className="input input-bordered"
             />
           </div>
@@ -39,7 +62,7 @@ export default function Profile() {
               onChange={(e) => {
                 setUpdateUserInfo({ ...updateUserInfo, email: e.target.value });
               }}
-              value={updateUserInfo.email}
+              value={updateUserInfo?.email}
               className="input input-bordered"
             />
           </div>
@@ -56,12 +79,12 @@ export default function Profile() {
                   password: e.target.value,
                 });
               }}
-              value={updateUserInfo.password}
+              value={updateUserInfo?.password}
               className="input input-bordered"
             />
           </div>
           <div className="form-control mt-6 flex-row space-x-5">
-            <UpdateUser />
+            <UpdateUser updatedInfo={updateUserInfo} />
             <DeleteUser />
             <button
               onClick={() => navigate("/home")}

@@ -1,17 +1,33 @@
-import { useEffect } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useTodo } from "../hooks/useTodo";
+import { UpdateTodo } from "../context/todos";
 
 export default function EditTodo({ todoId }: { todoId: string }) {
-  const { updateTodoInfo, setUpdateTodoInfo, handleUpdateTodo, getTodo } =
-    useTodo();
+  const [updateTodoInfo, setUpdateTodoInfo] = useState<UpdateTodo>({
+    title: "",
+    body: "",
+    checked: false,
+  });
+  const { todos, getTodo, updateTodo } = useTodo();
 
   useEffect(() => {
     getTodo(todoId);
+
+    const result = todos.find((todo) => todo._id === todoId);
+    setUpdateTodoInfo(result);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  function handleUpdateTodo(e: FormEvent) {
+    e.preventDefault();
+
+    updateTodo(todoId, updateTodoInfo);
+
+    document?.getElementById(`edit_modal_${todoId}`)?.close();
+  }
+
   return (
-    <form onSubmit={(e) => handleUpdateTodo(e, todoId, updateTodoInfo)}>
+    <form onSubmit={handleUpdateTodo}>
       <div className="form-control">
         <label className="label">
           <span className="label-text">Title</span>
@@ -22,7 +38,7 @@ export default function EditTodo({ todoId }: { todoId: string }) {
           onChange={(e) =>
             setUpdateTodoInfo({ ...updateTodoInfo, title: e.target.value })
           }
-          value={updateTodoInfo.title}
+          value={updateTodoInfo?.title}
           className="input input-bordered"
           required
         />
@@ -36,7 +52,7 @@ export default function EditTodo({ todoId }: { todoId: string }) {
           onChange={(e) =>
             setUpdateTodoInfo({ ...updateTodoInfo, body: e.target.value })
           }
-          value={updateTodoInfo.body}
+          value={updateTodoInfo?.body}
           className="textarea textarea-bordered"
           required
         />
