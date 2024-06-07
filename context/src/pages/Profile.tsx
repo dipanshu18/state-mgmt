@@ -10,25 +10,17 @@ import { useUser } from "../hooks/useUser";
 export default function Profile() {
   const navigate = useNavigate();
 
-  const [updateUserInfo, setUpdateUserInfo] = useState<
-    UpdateUserInfo | undefined
-  >({
+  const [updateUserInfo, setUpdateUserInfo] = useState<UpdateUserInfo>({
     username: "",
     email: "",
     password: "",
   });
 
-  const { user, getUser } = useUser();
+  const { user } = useUser();
 
   useEffect(() => {
-    getUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    setUpdateUserInfo(user);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    user && setUpdateUserInfo(user);
+  }, [user]);
 
   return (
     <div className="container p-5 flex flex-col justify-center items-center">

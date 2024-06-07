@@ -4,15 +4,16 @@ import { User } from "lucide-react";
 
 import { useAuth } from "../hooks/useAuth";
 import { useUser } from "../hooks/useUser";
+import { useTodo } from "../hooks/useTodo";
 
 export default function Navbar() {
-  const { user, getUser } = useUser();
   const { logout } = useAuth();
+  const { user, getUser } = useUser();
+  const { setTodos } = useTodo();
 
   useEffect(() => {
     getUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [getUser]);
 
   return (
     <div className="navbar bg-base-100">
@@ -40,7 +41,14 @@ export default function Navbar() {
               <Link to="/profile">Profile</Link>
             </li>
             <li>
-              <a onClick={logout}>Logout</a>
+              <a
+                onClick={() => {
+                  logout();
+                  setTodos([]);
+                }}
+              >
+                Logout
+              </a>
             </li>
           </ul>
         </div>

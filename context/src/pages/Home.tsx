@@ -9,8 +9,7 @@ export default function Home() {
 
   useEffect(() => {
     getTodos();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [getTodos]);
 
   return (
     <div>

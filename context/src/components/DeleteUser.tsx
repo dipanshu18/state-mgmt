@@ -1,15 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
+import { useTodo } from "../hooks/useTodo";
 
 export default function DeleteUser() {
   const navigate = useNavigate();
 
   const { user, deleteUser } = useUser();
+  const { setTodos } = useTodo();
 
   function handleDeleteUser() {
     deleteUser();
     navigate("/login");
     document.getElementById(`delete_modal_${user?._id}`)?.close();
+    setTodos([]);
   }
 
   return (

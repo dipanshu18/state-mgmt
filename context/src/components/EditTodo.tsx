@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useTodo } from "../hooks/useTodo";
-import { UpdateTodo } from "../context/todos";
+import { Todo, UpdateTodo } from "../context/todos";
 
 export default function EditTodo({ todoId }: { todoId: string }) {
   const [updateTodoInfo, setUpdateTodoInfo] = useState<UpdateTodo>({
@@ -13,10 +13,10 @@ export default function EditTodo({ todoId }: { todoId: string }) {
   useEffect(() => {
     getTodo(todoId);
 
-    const result = todos.find((todo) => todo._id === todoId);
+    const result = todos.find((todo) => todo._id === todoId) as unknown as Todo;
     setUpdateTodoInfo(result);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [getTodo]);
 
   function handleUpdateTodo(e: FormEvent) {
     e.preventDefault();

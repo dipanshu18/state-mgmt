@@ -11,8 +11,7 @@ export default function UpdateUser({
 
   useEffect(() => {
     getUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [getUser]);
 
   function handleUpdateUser(e: FormEvent) {
     e.preventDefault();

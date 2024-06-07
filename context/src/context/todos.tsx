@@ -1,5 +1,12 @@
 import { Axios } from "axios";
-import { useState, createContext, ReactNode } from "react";
+import {
+  useState,
+  createContext,
+  ReactNode,
+  SetStateAction,
+  Dispatch,
+  useCallback,
+} from "react";
 import { toast } from "sonner";
 
 export interface Todo {
@@ -32,6 +39,7 @@ const axiosInstance = new Axios({
 
 interface TodoContextType {
   todos: Todo[];
+  setTodos: Dispatch<SetStateAction<Todo[]>>;
   todo: Todo | undefined;
   getTodos: () => Promise<void>;
   getTodo: (id: string) => Promise<void>;
@@ -46,18 +54,16 @@ export function TodoProvider({ children }: { children: ReactNode }) {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todo, setTodo] = useState<Todo>();
 
-  async function getTodos() {
+  const getTodos = useCallback(async function () {
     const request = await axiosInstance.get("");
     const response = await JSON.parse(request.data);
 
     if (request.status === 200) {
       setTodos(response);
-    } else {
-      toast(response.message);
     }
-  }
+  }, []);
 
-  async function getTodo(id: string) {
+  const getTodo = useCallback(async function (id: string) {
     const request = await axiosInstance.get(id);
     const response = await JSON.parse(request.data);
 
@@ -66,7 +72,7 @@ export function TodoProvider({ children }: { children: ReactNode }) {
     } else {
       toast(response.message);
     }
-  }
+  }, []);
 
   async function createTodo(createTodoInfo: CreateTodo) {
     const request = await axiosInstance.post(
@@ -105,7 +111,8 @@ export function TodoProvider({ children }: { children: ReactNode }) {
 
     if (request.status === 200) {
       toast(response.message);
-      getTodos();
+      const result = todos.filter((todo) => todo._id !== id);
+      setTodos(result);
     } else {
       toast(response.message);
     }
@@ -115,6 +122,7 @@ export function TodoProvider({ children }: { children: ReactNode }) {
     <TodoContext.Provider
       value={{
         todos,
+        setTodos,
         getTodos,
         todo,
         getTodo,

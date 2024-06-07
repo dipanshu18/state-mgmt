@@ -1,5 +1,5 @@
 import { Axios } from "axios";
-import { ReactNode, useState, createContext } from "react";
+import { ReactNode, useState, createContext, useCallback } from "react";
 import { toast } from "sonner";
 
 interface User {
@@ -36,7 +36,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export function UserProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User>();
 
-  async function getUser() {
+  const getUser = useCallback(async function () {
     const request = await axiosInstance.get("");
     const response = await JSON.parse(request.data);
 
@@ -46,7 +46,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
     } else {
       toast(response.message);
     }
-  }
+  }, []);
 
   async function updateUser(updatedInfo: UpdateUserInfo) {
     const request = await axiosInstance.patch("", JSON.stringify(updatedInfo));
